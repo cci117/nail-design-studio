@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { buttonStyles } from "@/components/ui/button";
 
 type AuthMode = "login" | "register";
 
@@ -90,7 +91,7 @@ export function LoginForm({ configured }: { configured: boolean }) {
       <div className="grid grid-cols-2 rounded-xl border border-border bg-surface p-1" role="tablist" aria-label="账号操作">
         {(["login", "register"] as const).map((item) => {
           const active = mode === item;
-          return <button key={item} type="button" role="tab" aria-selected={active} onClick={() => changeMode(item)} className={`h-10 rounded-lg text-sm transition ${active ? "bg-zinc-100 font-medium text-black" : "text-zinc-500 hover:text-zinc-200"}`}>{item === "login" ? "登录" : "注册"}</button>;
+          return <button key={item} type="button" role="tab" aria-selected={active} onClick={() => changeMode(item)} className={`min-h-11 rounded-lg text-sm font-medium transition-colors ${active ? "bg-[#f5f5f5] text-black" : "bg-[#161616] text-white active:bg-[#303030]"}`}>{item === "login" ? "登录" : "注册"}</button>;
         })}
       </div>
 
@@ -100,7 +101,7 @@ export function LoginForm({ configured }: { configured: boolean }) {
         {mode === "register" && <label className="block"><span className="mb-2 block text-xs font-medium text-zinc-400">确认密码</span><input type="password" required minLength={MIN_PASSWORD_LENGTH} autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="再次输入密码" className="h-12 w-full rounded-xl border border-border bg-surface px-4 text-sm text-white placeholder:text-zinc-700 focus:border-zinc-500 focus:outline-none" /></label>}
         {error && <p role="alert" className="rounded-xl border border-red-900/50 bg-red-950/30 px-3 py-2 text-xs leading-5 text-red-300">{error}</p>}
         {success && <p role="status" className="flex gap-2 rounded-xl border border-emerald-900/50 bg-emerald-950/30 px-3 py-3 text-xs leading-5 text-emerald-300"><CheckCircle2 size={16} className="mt-0.5 shrink-0" />{success}</p>}
-        <button type="submit" disabled={pending || !configured} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-medium text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-500">{pending ? <><LoaderCircle size={17} className="animate-spin" /><span>{mode === "login" ? "正在登录…" : "正在注册…"}</span></> : <><span>{mode === "login" ? "登录" : "注册账号"}</span><ArrowRight size={16}/></>}</button>
+        <button type="submit" disabled={pending || !configured} className={buttonStyles({ className: "h-12 w-full" })}>{pending ? <><LoaderCircle size={17} className="animate-spin" /><span>{mode === "login" ? "正在登录…" : "正在注册…"}</span></> : <><span>{mode === "login" ? "登录" : "注册账号"}</span><ArrowRight size={16}/></>}</button>
         {!configured && <p className="text-center text-xs leading-5 text-zinc-600">Supabase 未配置，账号功能暂不可用。<br/>基础界面仍可通过首页预览。</p>}
       </form>
     </div>
