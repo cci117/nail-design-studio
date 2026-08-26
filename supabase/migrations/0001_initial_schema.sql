@@ -106,6 +106,23 @@ do $$ declare table_name text; begin
   end loop;
 end $$;
 
+-- Data API privileges for signed-in clients. RLS policies above remain the
+-- final row-level authorization boundary for every operation.
+grant usage on schema public to authenticated;
+grant usage on type public.design_status, public.design_version_type, public.entity_kind to authenticated;
+grant select, insert, update, delete on table
+  public.profiles,
+  public.inspirations,
+  public.favorite_assets,
+  public.assets,
+  public.works,
+  public.designs,
+  public.design_versions,
+  public.tags,
+  public.entity_tags,
+  public.media
+to authenticated;
+
 -- Simple ownership checks for polymorphic links are intentionally deferred until CRUD is implemented.
 -- RLS still prevents cross-account reads and writes through user_id.
 
