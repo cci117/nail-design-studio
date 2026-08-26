@@ -2,10 +2,10 @@ export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "default" | "compact" | "icon";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "border border-[#f5f5f5] bg-[#f5f5f5] text-black hover:bg-white active:border-[#d4d4d4] active:bg-[#d4d4d4] disabled:border-[#3a3a3a] disabled:bg-[#242424] disabled:text-[#a3a3a3]",
-  secondary: "border border-[#4a4a4a] bg-[#1a1a1a] text-white hover:border-[#666] hover:bg-[#242424] active:bg-[#303030] disabled:border-[#383838] disabled:bg-[#202020] disabled:text-[#9a9a9a]",
-  ghost: "border border-transparent bg-transparent text-[#f5f5f5] hover:bg-[#1a1a1a] active:bg-[#2a2a2a] disabled:text-[#8a8a8a]",
-  danger: "border border-[#a84450] bg-[#290d11] text-[#ffb4bd] hover:border-[#cf5966] hover:bg-[#381116] active:bg-[#4a171e] disabled:border-[#593037] disabled:bg-[#211012] disabled:text-[#a8757b]",
+  primary: "border !border-[#f5f5f5] !bg-[#f5f5f5] !text-black hover:!bg-white active:!border-[#d4d4d4] active:!bg-[#d4d4d4] disabled:!border-[#3a3a3a] disabled:!bg-[#242424] disabled:!text-[#b8b8b8]",
+  secondary: "border !border-[#4a4a4a] !bg-[#1a1a1a] !text-white hover:!border-[#666] hover:!bg-[#242424] active:!bg-[#303030] disabled:!border-[#383838] disabled:!bg-[#202020] disabled:!text-[#b0b0b0]",
+  ghost: "border !border-transparent !bg-transparent !text-[#f5f5f5] hover:!bg-[#1a1a1a] active:!bg-[#2a2a2a] disabled:!text-[#a3a3a3]",
+  danger: "border !border-[#a84450] !bg-[#290d11] !text-[#ffb4bd] hover:!border-[#cf5966] hover:!bg-[#381116] active:!bg-[#4a171e] disabled:!border-[#593037] disabled:!bg-[#211012] disabled:!text-[#c58c93]",
 };
 
 const sizes: Record<ButtonSize, string> = {
