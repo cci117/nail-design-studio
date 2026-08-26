@@ -5,8 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 export default async function PrivateLayout({ children }: { children: React.ReactNode }) {
   if (isSupabaseConfigured) {
     const supabase = await createClient();
-    const { data } = await supabase!.auth.getClaims();
-    if (!data?.claims) redirect("/login");
+    const { data: { user } } = await supabase!.auth.getUser();
+    if (!user) redirect("/login");
   }
   return <AppShell isConfigured={isSupabaseConfigured}>{children}</AppShell>;
 }
