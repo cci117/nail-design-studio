@@ -1,5 +1,5 @@
-import { LibraryEditorPage } from "@/features/library/library-editor-page";
+import { LibraryDraftStartPage } from "@/features/library/library-draft-start-page";
 
 export default function NewWorkPage() {
-  return <LibraryEditorPage kind="works" />;
+  return <LibraryDraftStartPage kind="works" />;
 }

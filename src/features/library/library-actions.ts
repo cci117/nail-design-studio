@@ -42,6 +42,21 @@ async function authenticatedUserId() {
   return user.id;
 }
 
+export async function createLibraryDraft(kindValue: string) {
+  if (!isLibraryKind(kindValue)) throw new Error("无效的资料库。");
+  const definition = getLibraryDefinition(kindValue);
+  let recordId: string;
+  try {
+    const userId = await authenticatedUserId();
+    const record = await libraryRepository.create(definition.table, userId, { status: "draft" });
+    recordId = record.id;
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "草稿创建失败，请重试。");
+  }
+  revalidatePath(definition.path);
+  redirect(`${definition.path}/${recordId}/edit?stage=media`);
+}
+
 function selectedTagIds(formData: FormData) {
   return [...new Set(formData.getAll("tag_ids").filter((value): value is string => typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value)))];
 }
@@ -67,7 +82,9 @@ export async function updateLibraryItem(kindValue: string, id: string, _state: F
   const definition = getLibraryDefinition(kindValue);
   try {
     const userId = await authenticatedUserId();
-    await libraryRepository.update(definition.table, id, parseValues(kindValue, formData));
+    const current = await libraryRepository.getById(definition.table, id);
+    if (!current) throw new Error("资料不存在或无权访问。");
+    await libraryRepository.update(definition.table, id, { ...parseValues(kindValue, formData), status: "active" });
     if (kindValue === "inspiration" || kindValue === "works") {
       await tagRepository.syncEntityTags(userId, definition.entityType, id, selectedTagIds(formData));
     }

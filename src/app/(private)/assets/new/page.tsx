@@ -1,5 +1,5 @@
-import { LibraryEditorPage } from "@/features/library/library-editor-page";
+import { LibraryDraftStartPage } from "@/features/library/library-draft-start-page";
 
 export default function NewAssetPage() {
-  return <LibraryEditorPage kind="assets" />;
+  return <LibraryDraftStartPage kind="assets" />;
 }

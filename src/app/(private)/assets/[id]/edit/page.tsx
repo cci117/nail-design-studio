@@ -1,8 +1,8 @@
 import { LibraryEditorPage } from "@/features/library/library-editor-page";
 
-type PageProps = { params: Promise<{ id: string }> };
+type PageProps = { params: Promise<{ id: string }>; searchParams: Promise<{ stage?: string }> };
 
-export default async function EditAssetPage({ params }: PageProps) {
-  const { id } = await params;
-  return <LibraryEditorPage kind="assets" id={id} />;
+export default async function EditAssetPage({ params, searchParams }: PageProps) {
+  const [{ id }, query] = await Promise.all([params, searchParams]);
+  return <LibraryEditorPage kind="assets" id={id} stage={query.stage === "details" ? "details" : "media"} />;
 }

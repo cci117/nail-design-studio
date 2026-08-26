@@ -1,5 +1,5 @@
-import { LibraryEditorPage } from "@/features/library/library-editor-page";
+import { LibraryDraftStartPage } from "@/features/library/library-draft-start-page";
 
 export default function NewInspirationPage() {
-  return <LibraryEditorPage kind="inspiration" />;
+  return <LibraryDraftStartPage kind="inspiration" />;
 }

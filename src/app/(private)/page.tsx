@@ -3,7 +3,7 @@ import { Images, Sparkles, PackageOpen, Palette, Layers3, WandSparkles, Bot, Sea
 const features = [
   { href: "/inspiration", title: "灵感库", description: "收藏的美甲款式", icon: Images },
   { href: "/favorite-assets", title: "收藏素材", description: "收藏的单个素材或物品", icon: Sparkles },
-  { href: "/assets", title: "素材库", description: "实际拥有的美甲素材", icon: PackageOpen },
+  { href: "/assets", title: "材料库", description: "实际拥有的美甲材料", icon: PackageOpen },
   { href: "/works", title: "作品", description: "已完成的美甲作品", icon: Palette },
   { href: "/designs", title: "设计", description: "保存的设计方案与过程", icon: Layers3 },
 ];

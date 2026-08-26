@@ -38,8 +38,8 @@ const definitions: Record<LibraryKind, LibraryDefinition> = {
     fields: [{ name: "name", label: "名称", required: true, placeholder: "素材或物品名称" }, { name: "category", label: "分类", placeholder: "例如：饰品、贴纸" }, { name: "notes", label: "备注", type: "textarea" }],
   },
   assets: {
-    kind: "assets", table: "assets", path: "/assets", title: "素材库", singular: "素材", description: "实际拥有、可用于制作的美甲素材", emptyTitle: "素材库为空", icon: PackageOpen, titleField: "name", entityType: "asset",
-    fields: [{ name: "name", label: "名称", required: true }, { name: "category", label: "分类", required: true, placeholder: "例如：甲油胶、钻饰" }, { name: "brand", label: "品牌" }, { name: "color", label: "颜色" }, { name: "quantity", label: "数量", type: "number" }, { name: "unit", label: "单位", placeholder: "瓶、盒、个" }, { name: "notes", label: "备注", type: "textarea" }],
+    kind: "assets", table: "assets", path: "/assets", title: "材料库", singular: "材料", description: "实际拥有、可用于制作的美甲材料", emptyTitle: "材料库为空", icon: PackageOpen, titleField: "name", entityType: "asset",
+    fields: [{ name: "name", label: "名称", required: true, placeholder: "材料名称" }, { name: "category", label: "分类", required: true, placeholder: "例如：甲油胶、钻饰" }, { name: "brand", label: "品牌" }, { name: "color", label: "颜色" }, { name: "quantity", label: "数量", type: "number" }, { name: "unit", label: "单位", placeholder: "瓶、盒、个" }, { name: "notes", label: "备注", type: "textarea" }],
   },
   works: {
     kind: "works", table: "works", path: "/works", title: "作品", singular: "作品", description: "实际已完成的美甲成品", emptyTitle: "还没有作品", icon: Palette, titleField: "title", entityType: "work", supportsTags: true,
