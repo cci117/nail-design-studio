@@ -53,7 +53,7 @@ export function TagSelector({
   }
 
   return (
-    <fieldset className="space-y-6 rounded-2xl border border-border bg-black/40 p-4 sm:p-5">
+    <fieldset className="space-y-6 rounded-2xl border border-border bg-surface p-4 sm:p-5">
       <legend className="px-2 text-sm font-medium text-zinc-200">标签</legend>
       {groups.map((group) => {
         const groupTags = tags.filter((tag) => tag.tag_group === group);
@@ -114,7 +114,7 @@ export function TagSelector({
                   onChange={(event) => setName(event.target.value)}
                   maxLength={40}
                   placeholder={`新建${tagGroupLabels[group]}标签`}
-                  className="h-11 min-w-0 flex-1 rounded-xl border border-zinc-700 bg-zinc-950 px-3 text-sm text-white placeholder:text-zinc-600 focus:border-zinc-400 focus:outline-none"
+                  className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
                 />
                 <button
                   type="button"

@@ -85,7 +85,7 @@ export function MediaGallery({ items }: { items: MediaItem[] }) {
       </button>)}
     </div>}
 
-    {active?.signedUrl && <div role="dialog" aria-modal="true" aria-label="图片浏览器" className="fixed inset-0 z-[70] flex flex-col bg-black px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-[calc(0.75rem+env(safe-area-inset-top))]">
+    {active?.signedUrl && <div role="dialog" aria-modal="true" aria-label="图片浏览器" className="immersive-dark fixed inset-0 z-[70] flex flex-col bg-black px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-[calc(0.75rem+env(safe-area-inset-top))]">
       <div className="flex min-h-11 items-center justify-between gap-3 px-1">
         <span className="rounded-full bg-[#181818] px-3 py-1.5 text-xs font-medium text-white">{activeIndex! + 1} / {available.length}</span>
         {active.role === "cover" && <span className="rounded-full border border-[#4a4a4a] bg-[#181818] px-3 py-1.5 text-xs font-medium text-white">封面</span>}

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { ImageIcon, Plus } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
-import { buttonStyles } from "@/components/ui/button";
+import { buttonStyles, floatingAddStyles } from "@/components/ui/button";
 import { libraryRepository, type LibraryListQuery, type LibraryRecord } from "@/data/repositories/supabase/library-repository";
 import { mediaRepository } from "@/data/repositories/supabase/media-repository";
 import { tagRepository } from "@/data/repositories/supabase/tag-repository";
@@ -126,6 +126,6 @@ export async function LibraryPage({ kind, searchParams = {} }: { kind: LibraryKi
           return <Link key={item.id} href={href} className="group overflow-hidden rounded-2xl border border-border bg-surface transition active:scale-[0.99] sm:hover:border-zinc-600"><div className="flex aspect-square items-center justify-center overflow-hidden border-b border-border bg-[#070708] text-zinc-700">{cover ? <img src={cover} alt="" className="h-full w-full object-cover"/> : <ImageIcon size={24} strokeWidth={1.3}/>}</div><div className="min-h-20 p-3.5"><div className="flex items-start justify-between gap-2"><h2 className="line-clamp-2 text-sm font-medium leading-5 text-zinc-100">{title}</h2>{draft && <span className="shrink-0 rounded-full border border-amber-800/80 bg-amber-950/40 px-2 py-1 text-[10px] font-medium text-amber-200">待完善</span>}</div>{meta && <p className="mt-1.5 truncate text-xs text-zinc-400">{meta}</p>}</div></Link>;
         })}</div>}
     </div>
-    <Link href={`${definition.path}/new`} className={buttonStyles({ className: "fixed bottom-24 right-5 z-30 min-h-14 rounded-full px-5 shadow-[0_8px_28px_rgba(255,255,255,0.22)] md:bottom-8 md:right-8" })}><Plus size={21} strokeWidth={2.5}/><span>添加{definition.singular}</span></Link>
+    <Link href={`${definition.path}/new`} className={floatingAddStyles()}><Plus size={21} strokeWidth={2.5}/><span>添加{definition.singular}</span></Link>
   </>;
 }

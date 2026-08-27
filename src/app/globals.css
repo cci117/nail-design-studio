@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+html[data-theme="dark"] {
   --background: #000;
   --surface: #0a0a0b;
   --surface-raised: #111114;
@@ -8,6 +9,30 @@
   --foreground: #f5f5f6;
   --muted: #92929b;
   --accent: #d7a6ff;
+  --primary: #f5f5f5;
+  --primary-foreground: #000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #fff;
+  --danger: #ffb4bd;
+  --danger-surface: #290d11;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --background: #f7f7f5;
+  --surface: #fff;
+  --surface-raised: #eeeeeb;
+  --border: #d2d2cd;
+  --foreground: #111;
+  --muted: #60605c;
+  --accent: #6e267f;
+  --primary: #111;
+  --primary-foreground: #fff;
+  --secondary: #e9e9e5;
+  --secondary-foreground: #111;
+  --danger: #9f1d2e;
+  --danger-surface: #fff0f1;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -18,6 +43,12 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
   --font-sans: system-ui, sans-serif;
 }
 
@@ -25,7 +56,40 @@
 html { background: var(--background); }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-sans), "PingFang SC", "Microsoft YaHei", sans-serif; }
 button, input { font: inherit; }
+input, textarea, select { color: var(--foreground); }
 a { color: inherit; text-decoration: none; }
 ::selection { background: #6b3b88; color: white; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (display-mode: standalone) { body { padding-top: env(safe-area-inset-top); } }
+
+/* Legacy utility colors are normalized here while feature components migrate to tokens. */
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-zinc-100,
+html[data-theme="light"] .text-zinc-200,
+html[data-theme="light"] .text-zinc-300 { color: var(--foreground) !important; }
+html[data-theme="light"] .text-zinc-400,
+html[data-theme="light"] .text-zinc-500,
+html[data-theme="light"] .text-zinc-600 { color: var(--muted) !important; }
+html[data-theme="light"] .bg-black,
+html[data-theme="light"] .bg-\[\#050505\],
+html[data-theme="light"] .bg-\[\#080808\],
+html[data-theme="light"] .bg-\[\#101010\],
+html[data-theme="light"] .bg-\[\#111\],
+html[data-theme="light"] .bg-\[\#111114\] { background-color: var(--surface) !important; }
+
+.immersive-dark { color-scheme: dark; --foreground: #f5f5f6; --muted: #a1a1aa; --border: #3f3f46; --surface: #0a0a0b; --surface-raised: #18181b; --primary: #f5f5f5; --primary-foreground: #000; --secondary: #1a1a1a; --secondary-foreground: #fff; }
+
+.floating-add {
+  background-color: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+  color: #000 !important;
+  opacity: 1 !important;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 55%);
+}
+html[data-theme="light"] .floating-add {
+  background-color: #111 !important;
+  border-color: #111 !important;
+  color: #fff !important;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 22%);
+}
+.floating-add:active { filter: brightness(.86); }

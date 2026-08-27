@@ -2,10 +2,10 @@ export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "default" | "compact" | "icon";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "border !border-[#f5f5f5] !bg-[#f5f5f5] !text-black hover:!bg-white active:!border-[#d4d4d4] active:!bg-[#d4d4d4] disabled:!border-[#3a3a3a] disabled:!bg-[#242424] disabled:!text-[#b8b8b8]",
-  secondary: "border !border-[#4a4a4a] !bg-[#1a1a1a] !text-white hover:!border-[#666] hover:!bg-[#242424] active:!bg-[#303030] disabled:!border-[#383838] disabled:!bg-[#202020] disabled:!text-[#b0b0b0]",
-  ghost: "border !border-transparent !bg-transparent !text-[#f5f5f5] hover:!bg-[#1a1a1a] active:!bg-[#2a2a2a] disabled:!text-[#a3a3a3]",
-  danger: "border !border-[#a84450] !bg-[#290d11] !text-[#ffb4bd] hover:!border-[#cf5966] hover:!bg-[#381116] active:!bg-[#4a171e] disabled:!border-[#593037] disabled:!bg-[#211012] disabled:!text-[#c58c93]",
+  primary: "border border-primary bg-primary text-primary-foreground hover:brightness-110 active:brightness-90 disabled:border-border disabled:bg-surface-raised disabled:text-muted",
+  secondary: "border border-border bg-secondary text-secondary-foreground hover:brightness-110 active:brightness-90 disabled:bg-surface-raised disabled:text-muted",
+  ghost: "border border-transparent bg-transparent text-foreground hover:bg-surface-raised active:bg-secondary disabled:text-muted",
+  danger: "border border-danger bg-danger-surface text-danger hover:brightness-110 active:brightness-90 disabled:border-border disabled:text-muted",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -19,5 +19,9 @@ export function buttonStyles({ variant = "primary", size = "default", className 
 }
 
 export function chipStyles(selected: boolean, className = "") {
-  return `inline-flex min-h-11 max-w-full items-center justify-center gap-1.5 rounded-full border px-4 text-sm font-medium opacity-100 transition-colors active:scale-[0.98] disabled:opacity-100 ${selected ? "border-[#f5f5f5] bg-[#f5f5f5] text-black active:bg-[#d4d4d4]" : "border-[#525252] bg-[#181818] text-white active:border-[#777] active:bg-[#303030]"} ${className}`;
+  return `inline-flex min-h-11 max-w-full items-center justify-center gap-1.5 rounded-full border px-4 text-sm font-medium opacity-100 transition-colors active:scale-[0.98] disabled:opacity-100 ${selected ? "border-primary bg-primary text-primary-foreground active:brightness-90" : "border-border bg-secondary text-secondary-foreground active:brightness-90"} ${className}`;
+}
+
+export function floatingAddStyles(className = "") {
+  return buttonStyles({ className: `floating-add fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-5 z-30 min-h-14 rounded-full px-5 shadow-lg md:bottom-8 md:right-8 ${className}` });
 }

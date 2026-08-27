@@ -8,10 +8,11 @@ export const metadata: Metadata = {
   applicationName: "美甲设计工作台",
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "美甲设计" },
   icons: { icon: "/icons/icon.svg", apple: "/icons/icon.svg" },
+  other: { nightmode: "disable" },
 };
 
-export const viewport: Viewport = { themeColor: "#000000", colorScheme: "dark", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#000000" }, { media: "(prefers-color-scheme: light)", color: "#f7f7f5" }], colorScheme: "dark light", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN"><body className="min-h-dvh bg-background text-foreground antialiased">{children}<ServiceWorkerRegistration /></body></html>;
+  return <html lang="zh-CN" data-theme="dark" suppressHydrationWarning><head><script id="theme-init" suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('nail-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}` }}/></head><body className="min-h-dvh bg-background text-foreground antialiased">{children}<ServiceWorkerRegistration /></body></html>;
 }

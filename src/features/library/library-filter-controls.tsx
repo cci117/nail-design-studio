@@ -125,7 +125,7 @@ export function LibraryFilterControls({ kind, path, queryString, q, sort, sortOp
     <form onSubmit={search} className="flex gap-2">
       <label className="relative min-w-0 flex-1">
         <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-zinc-300"/>
-        <input key={q} name="q" type="search" defaultValue={q} placeholder="搜索" className="h-12 w-full rounded-xl border border-[#4a4a4a] bg-[#111] pl-11 pr-4 text-sm text-white placeholder:text-zinc-400 focus:border-zinc-300 focus:outline-none"/>
+        <input key={q} name="q" type="search" defaultValue={q} placeholder="搜索" className="h-12 w-full rounded-xl border border-border bg-surface pl-11 pr-4 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"/>
       </label>
       <button type="submit" className={buttonStyles({ size: "compact", className: "h-12" })}>搜索</button>
     </form>
@@ -134,8 +134,8 @@ export function LibraryFilterControls({ kind, path, queryString, q, sort, sortOp
       <label className={buttonStyles({ variant: "secondary", className: "relative h-12 justify-start px-3" })}>
         <ArrowUpDown className="size-4 shrink-0"/>
         <span className="sr-only">排序</span>
-        <select aria-label="排序" value={sort} onChange={(event) => { const params = new URLSearchParams(queryString); params.set("sort", event.target.value); navigate(params); }} className="min-w-0 flex-1 appearance-none bg-transparent text-sm font-medium text-white outline-none">
-          {sortOptions.map((option) => <option key={option.value} value={option.value} className="bg-[#1a1a1a] text-white">{option.label}</option>)}
+        <select aria-label="排序" value={sort} onChange={(event) => { const params = new URLSearchParams(queryString); params.set("sort", event.target.value); navigate(params); }} className="min-w-0 flex-1 appearance-none bg-transparent text-sm font-medium text-foreground outline-none">
+          {sortOptions.map((option) => <option key={option.value} value={option.value} className="bg-surface text-foreground">{option.label}</option>)}
         </select>
       </label>
       <button type="button" onClick={openFilters} className={buttonStyles({ variant: "secondary", className: "h-12" })}><SlidersHorizontal className="size-4"/>筛选{filterCount(selected) > 0 && <span className="rounded-full bg-white px-2 py-0.5 text-xs text-black">{filterCount(selected)}</span>}</button>
@@ -147,9 +147,9 @@ export function LibraryFilterControls({ kind, path, queryString, q, sort, sortOp
 
     {open && <div className="fixed inset-0 z-[65]">
       <button type="button" aria-label="关闭筛选" onClick={() => setOpen(false)} className="absolute inset-0 bg-black/75"/>
-      <section role="dialog" aria-modal="true" aria-label="筛选" className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-3xl border-t border-[#4a4a4a] bg-[#0a0a0a] pt-2">
+      <section role="dialog" aria-modal="true" aria-label="筛选" className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-3xl border-t border-border bg-background pt-2">
         <div className="flex min-h-14 items-center justify-between border-b border-[#303030] px-5">
-          <h2 className="font-medium text-white">筛选</h2>
+          <h2 className="font-medium text-foreground">筛选</h2>
           <button type="button" onClick={() => setOpen(false)} aria-label="关闭" className={buttonStyles({ variant: "ghost", size: "icon", className: "rounded-full" })}><X className="size-5"/></button>
         </div>
         <div className="min-h-0 flex-1 space-y-7 overflow-y-auto px-5 py-6">
@@ -163,7 +163,7 @@ export function LibraryFilterControls({ kind, path, queryString, q, sort, sortOp
           </>}
           {kind === "works" && <div><p className="mb-3 text-xs font-medium text-zinc-300">完成日期</p><div className="grid grid-cols-2 gap-3"><label className="text-xs text-zinc-400">开始<input type="date" value={draft.completedFrom} onChange={(event) => setDraft((current) => ({ ...current, completedFrom: event.target.value }))} className="mt-2 h-11 w-full rounded-xl border border-[#4a4a4a] bg-[#151515] px-3 text-sm text-white"/></label><label className="text-xs text-zinc-400">结束<input type="date" value={draft.completedTo} onChange={(event) => setDraft((current) => ({ ...current, completedTo: event.target.value }))} className="mt-2 h-11 w-full rounded-xl border border-[#4a4a4a] bg-[#151515] px-3 text-sm text-white"/></label></div></div>}
         </div>
-        <div className="grid grid-cols-2 gap-3 border-t border-[#303030] bg-[#0a0a0a] px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        <div className="grid grid-cols-2 gap-3 border-t border-border bg-background px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
           <button type="button" onClick={() => setDraft({ shape: [], style: [], status: "", category: [], brand: [], color: [], stock: "", completedFrom: "", completedTo: "" })} className={buttonStyles({ variant: "secondary", className: "h-12" })}>重置</button>
           <button type="button" onClick={apply} className={buttonStyles({ className: "h-12" })}>确定（{filterCount(draft)}）</button>
         </div>
