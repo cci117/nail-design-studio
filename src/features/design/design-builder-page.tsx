@@ -9,7 +9,7 @@ import { fingerKeys, type DesignChoice, type DesignStructuredData } from "./desi
 function isStructured(value: unknown): value is DesignStructuredData {
   if (!value || typeof value !== "object") return false;
   const data = value as Partial<DesignStructuredData>;
-  return data.schema_version === 1 && Boolean(data.selection) && Boolean(data.fingers) && fingerKeys.every((key) => Boolean(data.fingers?.[key]));
+  return (data.schema_version === 1 || data.schema_version === 2) && Boolean(data.selection) && Boolean(data.fingers) && fingerKeys.every((key) => Boolean(data.fingers?.[key]));
 }
 
 export async function DesignBuilderPage({ designId }: { designId?: string }) {

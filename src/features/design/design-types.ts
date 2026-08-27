@@ -15,10 +15,33 @@ export interface FingerDesign {
 }
 
 export interface DesignStructuredData {
-  schema_version: 1;
+  schema_version: 1 | 2;
   requirement_text: string;
   selection: Omit<FingerDesign, "notes">;
   fingers: Record<FingerKey, FingerDesign>;
+  concept_source?: "simulation_preview";
+  concept_prompt?: string;
+  concept_keywords?: string[];
+  concept_style_ids?: string[];
+  concept_inspiration_ids?: string[];
+  concept_asset_ids?: string[];
+  concept_variant?: ConceptVariant;
+  concept_adjustment_text?: string;
+  concept_revision?: number;
+}
+
+export type ConceptVariant = "inspiration_led" | "material_led" | "free_style";
+
+export interface AdoptedConcept {
+  source: "simulation_preview";
+  prompt: string;
+  keywords: string[];
+  styleIds: string[];
+  inspirationIds: string[];
+  assetIds: string[];
+  variant: ConceptVariant;
+  adjustmentText: string;
+  revision: number;
 }
 
 export interface DesignChoice { id: string; label: string; imageUrl?: string; meta?: string; }
