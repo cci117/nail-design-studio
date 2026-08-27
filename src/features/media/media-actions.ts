@@ -6,7 +6,7 @@ import { libraryRepository } from "@/data/repositories/supabase/library-reposito
 import { mediaRepository } from "@/data/repositories/supabase/media-repository";
 import { getLibraryDefinition, type LibraryKind } from "@/features/library/library-config";
 import { MAX_MEDIA_PER_ENTITY, type NewMediaMetadata } from "./media-types";
-import type { EntityKind } from "@/types/domain";
+import type { EntityKind, WorkMediaKind } from "@/types/domain";
 
 const supportedEntities: Record<string, LibraryKind> = {
   inspiration: "inspiration",
@@ -69,6 +69,19 @@ export async function setCoverAction(entityTypeValue: string, entityId: string, 
     refresh(definition.path, entityId);
     return { error: null };
   } catch (error) { return safeError(error, "封面设置失败。"); }
+}
+
+export async function setWorkMediaKindAction(entityId: string, mediaId: string, kindValue: string) {
+  try {
+    const kinds: WorkMediaKind[] = ["press_on", "worn", "detail", "other"];
+    if (!kinds.includes(kindValue as WorkMediaKind)) throw new Error("图片分类无效。");
+    const { definition } = await context("work", entityId);
+    const item = await mediaRepository.get(mediaId);
+    if (!item || item.entity_type !== "work" || item.entity_id !== entityId) throw new Error("图片不存在或无权访问。");
+    await mediaRepository.updateWorkKind(mediaId, entityId, kindValue as WorkMediaKind);
+    refresh(definition.path, entityId);
+    return { error: null };
+  } catch (error) { return safeError(error, "图片分类保存失败。"); }
 }
 
 export async function reorderMediaAction(entityTypeValue: string, entityId: string, ids: string[]) {

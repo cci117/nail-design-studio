@@ -1,4 +1,4 @@
-import type { EntityKind } from "@/types/domain";
+import type { EntityKind, WorkMediaKind } from "@/types/domain";
 
 export const MAX_MEDIA_PER_ENTITY = 12;
 export const MAX_SOURCE_FILE_SIZE = 15 * 1024 * 1024;
@@ -17,6 +17,7 @@ export interface MediaItem {
   entity_type: EntityKind | null;
   entity_id: string | null;
   role: "cover" | "attachment" | string | null;
+  work_media_kind: WorkMediaKind | null;
   sort_order: number;
   created_at: string;
   updated_at: string;

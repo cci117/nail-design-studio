@@ -7,6 +7,9 @@ import { libraryRepository } from "@/data/repositories/supabase/library-reposito
 import { tagRepository } from "@/data/repositories/supabase/tag-repository";
 import { getLibraryDefinition, isLibraryKind, type FieldName, type LibraryKind } from "./library-config";
 import type { FormState } from "./library-form-state";
+import { workOutcomeRepository } from "@/data/repositories/supabase/work-outcome-repository";
+import { changeReasonValues } from "@/features/works/work-types";
+import type { WorkChangeReason, WorkRestorationLevel } from "@/types/domain";
 
 function value(formData: FormData, name: FieldName, required = false) {
   const entry = formData.get(name);
@@ -61,6 +64,23 @@ function selectedTagIds(formData: FormData) {
   return [...new Set(formData.getAll("tag_ids").filter((value): value is string => typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value)))];
 }
 
+function uuidValues(formData: FormData, name: string) {
+  return [...new Set(formData.getAll(name).filter((entry): entry is string => typeof entry === "string" && /^[0-9a-f-]{36}$/i.test(entry)))];
+}
+
+function workOutcomeValues(formData: FormData) {
+  const sourceEntry = formData.get("source_design_version_id");
+  const sourceId = typeof sourceEntry === "string" && /^[0-9a-f-]{36}$/i.test(sourceEntry) ? sourceEntry : null;
+  const restorationEntry = formData.get("restoration_level");
+  const restorations: WorkRestorationLevel[] = ["very_close", "adjusted", "major_changes"];
+  const restoration = typeof restorationEntry === "string" && restorations.includes(restorationEntry as WorkRestorationLevel) ? restorationEntry as WorkRestorationLevel : null;
+  const reasons = [...new Set(formData.getAll("change_reasons").filter((entry): entry is WorkChangeReason => typeof entry === "string" && changeReasonValues.includes(entry as WorkChangeReason)))];
+  const notesEntry = formData.get("feedback_notes");
+  const feedbackNotes = typeof notesEntry === "string" ? notesEntry.trim() : "";
+  if (feedbackNotes.length > 4000) throw new Error("反馈备注不能超过 4000 字。");
+  return { source_design_version_id: sourceId, restoration_level: restoration, change_reasons: reasons, feedback_notes: feedbackNotes || null };
+}
+
 export async function createLibraryItem(kindValue: string, _state: FormState, formData: FormData): Promise<FormState> {
   if (!isLibraryKind(kindValue)) return { error: "无效的资料库。" };
   const definition = getLibraryDefinition(kindValue);
@@ -84,10 +104,12 @@ export async function updateLibraryItem(kindValue: string, id: string, _state: F
     const userId = await authenticatedUserId();
     const current = await libraryRepository.getById(definition.table, id);
     if (!current) throw new Error("资料不存在或无权访问。");
-    await libraryRepository.update(definition.table, id, { ...parseValues(kindValue, formData), status: "active" });
+    const outcomeLoaded = kindValue === "works" && formData.get("work_outcome_loaded") === "true";
+    await libraryRepository.update(definition.table, id, { ...parseValues(kindValue, formData), ...(outcomeLoaded ? workOutcomeValues(formData) : {}), status: "active" });
     if (kindValue === "inspiration" || kindValue === "works") {
       await tagRepository.syncEntityTags(userId, definition.entityType, id, selectedTagIds(formData));
     }
+    if (outcomeLoaded) await workOutcomeRepository.syncAssets(userId, id, uuidValues(formData, "asset_ids"));
   } catch (error) { return { error: error instanceof Error ? error.message : "保存失败，请重试。" }; }
   revalidatePath(definition.path);
   revalidatePath(`${definition.path}/${id}`);

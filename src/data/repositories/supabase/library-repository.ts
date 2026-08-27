@@ -77,13 +77,13 @@ export const libraryRepository = {
     if (error) throw new Error(error.message);
     return data as LibraryRecord | null;
   },
-  async create(table: LibraryTable, userId: string, values: Record<string, string | number | null>) {
+  async create(table: LibraryTable, userId: string, values: Record<string, string | number | string[] | null>) {
     const supabase = await client();
     const { data, error } = await supabase.from(table).insert({ ...values, user_id: userId }).select("*").single();
     if (error) throw new Error(error.message);
     return data as LibraryRecord;
   },
-  async update(table: LibraryTable, id: string, values: Record<string, string | number | null>) {
+  async update(table: LibraryTable, id: string, values: Record<string, string | number | string[] | null>) {
     const supabase = await client();
     const { data, error } = await supabase.from(table).update(values).eq("id", id).is("deleted_at", null).select("*").single();
     if (error) throw new Error(error.message);

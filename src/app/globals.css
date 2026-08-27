@@ -93,3 +93,18 @@ html[data-theme="light"] .floating-add {
   box-shadow: 0 10px 30px rgb(0 0 0 / 22%);
 }
 .floating-add:active { filter: brightness(.86); }
+
+/* High-frequency detail-page editor entry. Keep its resting state explicit;
+   mobile browsers must not depend on hover/pressed colors for legibility. */
+a[href$="/edit"][class~="h-12"] {
+  background-color: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+  color: #000 !important;
+  opacity: 1 !important;
+}
+html[data-theme="light"] a[href$="/edit"][class~="h-12"] {
+  background-color: #111 !important;
+  border-color: #111 !important;
+  color: #fff !important;
+}
+a[href$="/edit"][class~="h-12"]:active { filter: brightness(.88); }

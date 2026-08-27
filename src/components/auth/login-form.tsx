@@ -56,12 +56,13 @@ export function LoginForm({ configured }: { configured: boolean }) {
     if (!supabase) { setError("请先配置 Supabase 环境变量。"); return; }
 
     setPending(true);
+    let navigating = false;
 
     try {
       if (mode === "register") {
         const { data, error: signUpError } = await supabase.auth.signUp({ email: normalizedEmail, password });
         if (signUpError) { setError(getSafeAuthError(mode, signUpError.message)); return; }
-        if (data.session) { router.push("/"); router.refresh(); return; }
+        if (data.session) { navigating = true; router.replace("/"); return; }
 
         setPassword("");
         setConfirmPassword("");
@@ -77,12 +78,12 @@ export function LoginForm({ configured }: { configured: boolean }) {
       if (signInError) { setError(getSafeAuthError(mode, signInError.message)); return; }
       if (!data.user || !data.session) { setError("登录请求未建立有效会话"); return; }
 
+      navigating = true;
       router.replace("/");
-      router.refresh();
     } catch {
       setError("无法连接登录服务，请检查网络后重试。");
     } finally {
-      setPending(false);
+      if (!navigating) setPending(false);
     }
   }
 

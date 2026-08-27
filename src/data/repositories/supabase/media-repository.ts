@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { EntityKind } from "@/types/domain";
+import type { EntityKind, WorkMediaKind } from "@/types/domain";
 import { SIGNED_URL_TTL_SECONDS, type MediaItem, type NewMediaMetadata } from "@/features/media/media-types";
 
 async function client() {
@@ -45,7 +45,7 @@ export const mediaRepository = {
 
   async create(userId: string, entityType: EntityKind, entityId: string, metadata: NewMediaMetadata, role: "cover" | "attachment", sortOrder: number) {
     const supabase = await client();
-    const { data, error } = await supabase.from("media").insert({ user_id: userId, storage_bucket: "user-media", storage_path: metadata.storagePath, media_type: "image", mime_type: metadata.mimeType, width: metadata.width, height: metadata.height, file_size: metadata.fileSize, entity_type: entityType, entity_id: entityId, role, sort_order: sortOrder }).select("*").single();
+    const { data, error } = await supabase.from("media").insert({ user_id: userId, storage_bucket: "user-media", storage_path: metadata.storagePath, media_type: "image", mime_type: metadata.mimeType, width: metadata.width, height: metadata.height, file_size: metadata.fileSize, entity_type: entityType, entity_id: entityId, role, sort_order: sortOrder, work_media_kind: entityType === "work" ? "press_on" : null }).select("*").single();
     if (error) throw new Error(error.message);
     return data as MediaItem;
   },
@@ -77,6 +77,12 @@ export const mediaRepository = {
       const { error } = await supabase.from("media").update({ sort_order: sortOrder }).eq("id", id).eq("entity_type", entityType).eq("entity_id", entityId);
       if (error) throw new Error(error.message);
     }
+  },
+
+  async updateWorkKind(id: string, entityId: string, kind: WorkMediaKind) {
+    const supabase = await client();
+    const { error } = await supabase.from("media").update({ work_media_kind: kind }).eq("id", id).eq("entity_type", "work").eq("entity_id", entityId);
+    if (error) throw new Error(error.message);
   },
 
   async deleteStorage(path: string) {

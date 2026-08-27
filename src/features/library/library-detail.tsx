@@ -10,6 +10,7 @@ import { DeleteButton } from "./delete-button";
 import { buttonStyles } from "@/components/ui/button";
 import { mediaRepository } from "@/data/repositories/supabase/media-repository";
 import { MediaGallery } from "@/features/media/media-gallery";
+import { WorkDetail } from "@/features/works/work-detail";
 
 function formatValue(name: string, value: unknown) {
   if (value === null || value === undefined || value === "") return "—";
@@ -18,6 +19,7 @@ function formatValue(name: string, value: unknown) {
 }
 
 export async function LibraryDetail({ kind, id }: { kind: LibraryKind; id: string }) {
+  if (kind === "works") return <WorkDetail id={id}/>;
   const definition = getLibraryDefinition(kind);
   const [item, tags, media] = await Promise.all([
     libraryRepository.getById(definition.table, id),

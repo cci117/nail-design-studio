@@ -10,6 +10,7 @@ import { MediaGallery } from "@/features/media/media-gallery";
 import { MediaManager } from "@/features/media/media-manager";
 import { getLibraryDefinition, type LibraryKind } from "./library-config";
 import { LibraryForm } from "./library-form";
+import { workOutcomeRepository } from "@/data/repositories/supabase/work-outcome-repository";
 
 export async function LibraryEditorPage({ kind, id, stage = "media" }: { kind: LibraryKind; id: string; stage?: "media" | "details" }) {
   const definition = getLibraryDefinition(kind);
@@ -22,6 +23,24 @@ export async function LibraryEditorPage({ kind, id, stage = "media" }: { kind: L
     mediaRepository.list(definition.entityType, id),
   ]);
   const draft = item.status === "draft";
+  let designVersions: Awaited<ReturnType<typeof workOutcomeRepository.designVersionChoices>> = [];
+  let assets: Awaited<ReturnType<typeof workOutcomeRepository.assetChoices>> = [];
+  let selectedAssetIds: string[] = [];
+  let workOutcomeReady = true;
+
+  // The image-first draft stage does not need outcome metadata. Optional
+  // V0.3.1 lookups must never make an existing work route unavailable.
+  if (kind === "works" && (!draft || stage === "details")) {
+    const [versionsResult, assetsResult, selectedAssetsResult] = await Promise.allSettled([
+      workOutcomeRepository.designVersionChoices(),
+      workOutcomeRepository.assetChoices(),
+      workOutcomeRepository.assetIds(id),
+    ]);
+    if (versionsResult.status === "fulfilled") designVersions = versionsResult.value;
+    if (assetsResult.status === "fulfilled") assets = assetsResult.value;
+    if (selectedAssetsResult.status === "fulfilled") selectedAssetIds = selectedAssetsResult.value;
+    workOutcomeReady = versionsResult.status === "fulfilled" && assetsResult.status === "fulfilled" && selectedAssetsResult.status === "fulfilled";
+  }
 
   if (draft && (stage === "media" || media.length === 0)) {
     return <>
@@ -44,7 +63,7 @@ export async function LibraryEditorPage({ kind, id, stage = "media" }: { kind: L
         <Link href={`${definition.path}/${id}/edit?stage=media`} className={buttonStyles({ variant: "secondary", className: "mt-4 h-12 w-full" })}><Images className="size-4"/>管理图片</Link>
       </section>
       <div className="rounded-2xl border border-border bg-[#050505] p-5 sm:p-7">
-        <LibraryForm kind={kind} item={item} tags={tags} selectedTagIds={selectedTags.map((tag) => tag.id)}/>
+        <LibraryForm kind={kind} item={item} tags={tags} selectedTagIds={selectedTags.map((tag) => tag.id)} designVersions={designVersions} assets={assets} selectedAssetIds={selectedAssetIds} workOutcomeReady={workOutcomeReady}/>
       </div>
     </>;
   }
@@ -52,7 +71,7 @@ export async function LibraryEditorPage({ kind, id, stage = "media" }: { kind: L
   return <>
     <PageHeader title={`编辑${definition.singular}`} description="编辑文字资料与图片" backHref={`${definition.path}/${id}`}/>
     <div className="rounded-2xl border border-border bg-[#050505] p-5 sm:p-7">
-      <LibraryForm kind={kind} item={item} tags={tags} selectedTagIds={selectedTags.map((tag) => tag.id)}/>
+      <LibraryForm kind={kind} item={item} tags={tags} selectedTagIds={selectedTags.map((tag) => tag.id)} designVersions={designVersions} assets={assets} selectedAssetIds={selectedAssetIds} workOutcomeReady={workOutcomeReady}/>
     </div>
     <MediaManager entityType={definition.entityType} entityId={id} items={media}/>
   </>;
