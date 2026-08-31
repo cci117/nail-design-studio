@@ -19,7 +19,7 @@ export interface DesignStructuredData {
   requirement_text: string;
   selection: Omit<FingerDesign, "notes">;
   fingers: Record<FingerKey, FingerDesign>;
-  concept_source?: "simulation_preview";
+  concept_source?: "simulation_preview" | "free_ai";
   concept_prompt?: string;
   concept_keywords?: string[];
   concept_style_ids?: string[];
@@ -28,12 +28,13 @@ export interface DesignStructuredData {
   concept_variant?: ConceptVariant;
   concept_adjustment_text?: string;
   concept_revision?: number;
+  concept_quality_feedback?: NailConceptQualityFeedback;
 }
 
 export type ConceptVariant = "inspiration_led" | "material_led" | "free_style";
 
 export interface AdoptedConcept {
-  source: "simulation_preview";
+  source: "simulation_preview" | "free_ai";
   prompt: string;
   keywords: string[];
   styleIds: string[];
@@ -42,6 +43,7 @@ export interface AdoptedConcept {
   variant: ConceptVariant;
   adjustmentText: string;
   revision: number;
+  qualityFeedback?: NailConceptQualityFeedback;
 }
 
 export interface DesignChoice { id: string; label: string; imageUrl?: string; meta?: string; }
@@ -50,3 +52,4 @@ export interface DesignTagChoice { id: string; name: string; group: string; }
 export function blankFinger(selection?: Partial<FingerDesign>): FingerDesign {
   return { inspiration_ids: selection?.inspiration_ids ?? [], material_ids: selection?.material_ids ?? [], shape_tag_ids: selection?.shape_tag_ids ?? [], style_tag_ids: selection?.style_tag_ids ?? [], notes: selection?.notes ?? "" };
 }
+import type { NailConceptQualityFeedback } from "@/services/ai/validation/nail-concept-validation";

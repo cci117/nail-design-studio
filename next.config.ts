@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["192.168.1.6"],
+  allowedDevOrigins: ["192.168.1.6", "192.168.1.252"],
   devIndicators: false,
   async headers() {
     return [{ source: "/sw.js", headers: [
